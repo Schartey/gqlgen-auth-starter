@@ -50,12 +50,17 @@ gqlgen-auth-starter/
 ### docker run
 
 You can either use the prepared gqlgen - image I made or build it on your own. To edit gqlgen-files
-use docker volumes and bind /app
+use docker volumes and bind /app. 
 ```
 docker run -v PROJECT_PATH:/app schartey/gqlgen
 # or
 docker build . --tag=YOUR-TAG
 docker run -v PROJECT_PATH:/app YOUR-TAG
+```
+
+You can also bind your go cache for faster startup time.
+```
+docker run -v PROJECT_PATH:/app -v $GOPATH/pkg/mod/cache:/go/pkg/mod/cache YOUR-TAG
 ```
 
 The image will generate the gql-files automatically at first start.
