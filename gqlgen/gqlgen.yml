@@ -16,9 +16,9 @@ models:
   User:
     model: github.com/schartey/gqlgen-auth-starter/model.User
 
-resolver:
-  filename: resolver.go
-  type: Resolver
+#resolver:
+#  filename: resolver.go
+#  type: Resolver
 autobind: []
 #directives:
 #  deprecated:

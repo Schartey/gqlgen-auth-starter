@@ -97,6 +97,14 @@ you have to remove (comment) the directives settings in gqlgen.yaml.
 
 - Reflex does not support Windows, therefor hot-reload will not work on this platform.
 
+- As mentioned in this [Thread](https://github.com/99designs/gqlgen/blob/master/docs/content/getting-started.md#write-the-resolvers) 
+  gqlgen is currently not able to update resolver.go. There are two viable solutions to this problem:
+    - Copy the contents of resolver.go, delete it, run gqlgen and paste into the newly generated resolver.go. (Becomes tedious and hard to manage)
+    - Set gqlgen to not generate resolver.go in the config file and just create the resolvers for yourself. This way you can also manage multiple files with multiple
+      resolvers. Resolvers are generally not difficult to write, so I would suggest this option. I also recommend looking at [git-bug](https://github.com/MichaelMure/git-bug)
+      for more examples, since gqlgen-auth-starter works the same way.
+      
+      
 [1]: https://github.com/99designs/gqlgen
 [2]: https://www.keycloak.org/
 [3]: https://github.com/OscarYuen/go-graphql-starter
