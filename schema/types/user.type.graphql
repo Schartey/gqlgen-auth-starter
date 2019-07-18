@@ -1,0 +1,15 @@
+
+type Person {
+    id: ID!
+    firstname:  String
+    lastname:   String
+    email:      String
+    phone:      String
+    birthdate:  Time
+}
+
+type User {
+    id: ID!
+    person: Person
+    username: String
+}

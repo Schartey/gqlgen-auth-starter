@@ -248,49 +248,52 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var parsedSchema = gqlparser.MustLoadSchema(
-	&ast.Source{Name: "schema.graphql", Input: `scalar Time
-
-schema {
-    query: Query
-    mutation: Mutation
+	&ast.Source{Name: "../schema.graphql", Input: `schema {
+  query: Query
+  mutation: Mutation
 }
 
 type Query {
-    getUserById(id: String): User
-    getUsers: [User]!
+  getUserById(id: String): User
+  getUsers: [User]!
 }
 
 type Mutation {
-    addUser(user: UserInput!): User
+  addUser(user: UserInput!): User
 }
 
 type Person {
-    id: ID!
-    firstname:  String
-    lastname:   String
-    email:      String
-    phone:      String
-    birthdate:  Time
+  id: ID!
+  firstname: String
+  lastname: String
+  email: String
+  phone: String
+  birthdate: Time
 }
 
 type User {
-    id: ID!
-    person: Person
-    username: String
+  id: ID!
+  person: Person
+  username: String
 }
 
+scalar Time
+
+
+
 input PersonInput {
-    firstname: String!
-    lastname: String!
-    email: String!
-    phone: String!
-    birthdate: Time!
+  firstname: String!
+  lastname: String!
+  email: String!
+  phone: String!
+  birthdate: Time!
 }
 
 input UserInput {
-    username: String!,
-    person: PersonInput!
-}`},
+  username: String!
+  person: PersonInput!
+}
+`},
 )
 
 // endregion ************************** generated!.gotpl **************************
