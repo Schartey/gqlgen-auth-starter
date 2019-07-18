@@ -9,6 +9,13 @@ exec:
   filename: generated.go
 model:
   filename: models_gen.go
+
+models:
+  Person:
+    model: github.com/schartey/gqlgen-auth-starter/model.Person
+  User:
+    model: github.com/schartey/gqlgen-auth-starter/model.User
+
 resolver:
   filename: resolver.go
   type: Resolver
