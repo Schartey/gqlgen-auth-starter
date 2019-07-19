@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  gqlgen-auth-starter:
+    build: .
+    volumes:
+      - .:/app
+      - $GOPATH/pkg/mod/cache:/go/pkg/mod/cache
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
