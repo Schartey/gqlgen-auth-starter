@@ -7,6 +7,6 @@ services:
       - .:/app
       - $GOPATH/pkg/mod/cache:/go/pkg/mod/cache
     ports:
-      - "8080:8080"
+      - "3000:3000"
     environment:
-      - PORT=8080
+      - PORT=3000

@@ -93,12 +93,26 @@ Afterwards it will update generated files according to your changes and run the 
 ### docker compose
 
 Running the project with docker-compose is faster and easier. Just run the following command to start the project.
-This will also build the docker image locally and in future start up needed databases.
+This will also build the docker image locally and in future start up needed databases. The project runs on port 3000 with this config, since
+keycloak already uses 8080.
 
 ```
 docker-compose up
 ```
 
+To start keycloak without the project use the docker-compose.keycloak.yml. 
+
+```
+docker-compose -f docker-compose.keycloak.yml up
+```
+
+To start the project with keycloak use both compose files. On Windows hot-reload is not working as intended (see Known Issues),
+therefore it's recommended to start keycloak independent as stated above, else you will have to restart both the keycloak and
+project container continuously.
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.keycloak.yml up
+```
 
 ### Development
 
