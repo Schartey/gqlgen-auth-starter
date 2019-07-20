@@ -30,6 +30,8 @@ gqlgen-auth-starter/
 ├── docker/
 │   ├── docker-entrypoint.sh
 │   └── README.md
+├── keycloak/
+│   └── realm-export.json
 ├── gqlgen/
 │   ├── resolvers/
 │   │   ├── rootMutationResolver.go
@@ -130,6 +132,11 @@ Each of these steps should cause reflex to hot-reload and by that regenerating n
 
 As mentioned before there is a prepared image which can be used to develop with gqlgen. This image will be tagged in
 git with gqlgen-starter. Further development of the actual gqlgen-auth-starter project will continiously be merged to master.
+
+### Keycloak
+
+This project uses Keycloak as Authentication Provider. A demo realm with preconfigured client and client roles is imported
+with the docker-compose file. You can adjust the configuration file in the keycloak folder or the web-interface. 
 
 ## Known Issues
 
