@@ -14,12 +14,16 @@ The purpose of this repository is to help others get started and receive valuabl
 - [x] Integrate gqlgen
 - [x] Split resolvers
 - [x] Schema generation with [mattdamon108/gqlmerge][7]
+- [ ] Logging
+- [ ] Proper context usage
 - [ ] Cursor based pagination (Relay Cursor Connections Specification)
 - [ ] Add Authentication using Keycloak
 - [ ] Add Authorization using Keycloak
 - [ ] Add Registration
 - [ ] Use GORM with Postgres to save additional data
 - [ ] Use Redis to save session data
+- [ ] Caching GraphQL Requests
+- [ ] Caching Keycloak Data
 - [ ] Add unit tests
 - [ ] Show example usage of subscription
 
