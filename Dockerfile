@@ -8,6 +8,7 @@ RUN go get github.com/mattdamon108/gqlmerge
 
 COPY docker/go.mod /app/
 COPY docker/go.sum /app/
+
 COPY reflex.conf /reflex/
 
 COPY docker/docker-entrypoint.sh /

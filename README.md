@@ -14,7 +14,10 @@ The purpose of this repository is to help others get started and receive valuabl
 - [x] Integrate gqlgen
 - [x] Split resolvers
 - [x] Schema generation with [mattdamon108/gqlmerge][7]
-- [ ] Logging
+- [x] Config using [spf13/viper][9]
+- [ ] Logging with [Sirupsen/logrus][8]
+- [ ] Health-Check
+- [ ] OpenTracing Support
 - [ ] Proper context usage
 - [ ] Cursor based pagination (Relay Cursor Connections Specification)
 - [ ] Add Authentication using Keycloak
@@ -170,3 +173,5 @@ you have to remove (comment) the directives settings in gqlgen.yaml.
 [5]: https://github.com/cespare/reflex
 [6]: https://github.com/MichaelMure/git-bug
 [7]: https://github.com/mattdamon108/gqlmerge
+[8]: https://github.com/Sirupsen/logrus
+[9]: https://github.com/spf13/viper

@@ -5,6 +5,8 @@ import (
 	"github.com/schartey/gqlgen-auth-starter/gqlgen"
 	"github.com/schartey/gqlgen-auth-starter/model"
 	"strconv"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type rootMutationResolver struct {
@@ -36,6 +38,8 @@ func (r *rootMutationResolver) AddUser(ctx context.Context, user gqlgen.UserInpu
 			ID:        "shouldbegenerated",
 		},
 	}
+
+	log.WithField("user", user).Debugf("AddUser")
 
 	return r.Users[idString], nil
 }

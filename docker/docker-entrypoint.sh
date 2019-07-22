@@ -1,6 +1,22 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
 
+pid=0
+
+int_proc() {
+  if [ $pid -ne 0 ]; then
+    kill -SIGINT "$pid"
+    wait "$pid"
+  fi
+  exit 143;
+}
+
+# docker sends sigterm on ctrl-c
+# setup handler
+# on callback, kill the last background process, which is `tail -f /dev/null` and execute the specified handler
+trap 'kill ${!}; int_proc' SIGINT
+trap 'kill ${!}; int_proc' SIGTERM
+
+# setup application
 FOLDER=/app/gqlgen
 FILE=/app/gqlgen/gqlgen.yml
 
@@ -18,7 +34,13 @@ fi
 
 cd /app
 
+#run application
 echo 'Running'
-reflex -c /reflex/reflex.conf
+exec reflex -c /reflex/reflex.conf &
+pid="$!"
 
-exec "$@"
+# wait forever
+while true
+do
+  tail -f /dev/null & wait ${!}
+done

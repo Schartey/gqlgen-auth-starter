@@ -4,30 +4,88 @@ import (
 	"context"
 	"github.com/schartey/gqlgen-auth-starter/gqlgen/resolvers"
 	"github.com/schartey/gqlgen-auth-starter/model"
-	"log"
+	"io"
+	"syscall"
+
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
 	"github.com/99designs/gqlgen/handler"
+	log "github.com/sirupsen/logrus"
 
 	h "github.com/schartey/gqlgen-auth-starter/handler"
 	"github.com/schartey/gqlgen-auth-starter/gqlgen"
+
+	nested "github.com/antonfisher/nested-logrus-formatter"
 )
 
 const defaultPort = "8080"
+const defaultLogFile = "default.log"
+
+var server http.Server
 
 func main() {
+	ctx := context.Background()
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
-	ctx := context.Background()
-	ctx = WithSigStop(ctx)
+	logFile := os.Getenv("LOG_FILE")
+	if logFile == "" {
+		logFile = defaultLogFile
+	}
+	// Initialize Logging to file and stdout
+	InitializeLogging(logFile)
 
-	users := map[string]*model.User{
+	// Create channel to handle incoming sigint and sigterm
+	done := make(chan os.Signal, 1)
+	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	// Here we might setup our repositories for database storage
+	users := setupRepository()
+
+	// Add repositories to the resolver so we can store data in resolvers
+	resolver := resolvers.NewRootResolver(users)
+
+	// Setup server
+	server := setupServer(ctx, port, resolver)
+
+	// When we receive sigint or siterm we continue to stopping the server
+	<-done
+	log.Info("Server Stopped")
+
+	// The server gets 5 seconds time until shutdown
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer func() {
+		// extra handling here
+		cancel()
+	}()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatalf("Server Shutdown Failed:%+v", err)
+	}
+	log.Debug("Server Exited Properly")
+}
+
+func InitializeLogging(logFile string) {
+
+	var file, err = os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Println("Could Not Open Log File : " + err.Error())
+	}
+	log.SetOutput(io.MultiWriter(os.Stdout, file))
+	log.SetFormatter(&nested.Formatter{
+		HideKeys:    true,
+		FieldsOrder: []string{"component", "category"},
+	})
+}
+
+func setupRepository() map[string]*model.User {
+	return map[string]*model.User{
 		"1": {
 			ID:       "1",
 			Username: "Joe",
@@ -53,32 +111,22 @@ func main() {
 			},
 		},
 	}
-
-	resolver := resolvers.NewRootResolver(users)
-
-	http.Handle("/", handler.Playground("GraphQL playground", "/query"))
-	http.Handle("/query", h.AddContext(ctx, handler.GraphQL(gqlgen.NewExecutableSchema(gqlgen.Config{Resolvers: resolver}))))
-
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-func WithSigStop(ctx context.Context) context.Context {
-	ctx, cancel := context.WithCancel(ctx)
+func setupServer(ctx context.Context, port string, resolver *resolvers.RootResolver) http.Server {
+	m := http.NewServeMux()
+	server := http.Server{Addr: ":"+port, Handler: m}
 
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	defer func() {
-		signal.Stop(c)
-		cancel()
-	}()
+	m.Handle("/", handler.Playground("GraphQL playground", "/query"))
+	m.Handle("/query", h.AddContext(ctx, handler.GraphQL(gqlgen.NewExecutableSchema(gqlgen.Config{Resolvers: resolver}))))
+
 	go func() {
-		select {
-		case <-c:
-			cancel()
-		case <-ctx.Done():
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("listen: %s\n", err)
 		}
 	}()
 
-	return ctx
+	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+
+	return server
 }
