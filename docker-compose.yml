@@ -10,4 +10,5 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
-      - LOG_FILE=tmp/gqlgen-auth-starter.log
+      - CONFIG_FILE=Config
+      - CONFIG_PATH=config

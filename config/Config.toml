@@ -1,0 +1,3 @@
+[log]
+    debug-mode = true
+    log-file = "tmp/gqlgen-auth-starter.log"

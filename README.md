@@ -15,7 +15,7 @@ The purpose of this repository is to help others get started and receive valuabl
 - [x] Split resolvers
 - [x] Schema generation with [mattdamon108/gqlmerge][7]
 - [x] Config using [spf13/viper][9]
-- [ ] Logging with [Sirupsen/logrus][8]
+- [x] Logging with [Sirupsen/logrus][8]
 - [ ] Health-Check
 - [ ] OpenTracing Support
 - [ ] Proper context usage

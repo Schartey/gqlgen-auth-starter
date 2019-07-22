@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/schartey/gqlgen-auth-starter/gqlgen/resolvers"
 	"github.com/schartey/gqlgen-auth-starter/model"
+	"github.com/schartey/gqlgen-auth-starter/utils"
+	"github.com/spf13/viper"
 	"io"
 	"syscall"
 
@@ -29,17 +31,18 @@ var server http.Server
 func main() {
 	ctx := context.Background()
 
+	config, err := setupConfig()
+	if err != nil {
+		log.Panicf("Could not load config: %s", err)
+	}
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
-	logFile := os.Getenv("LOG_FILE")
-	if logFile == "" {
-		logFile = defaultLogFile
-	}
 	// Initialize Logging to file and stdout
-	InitializeLogging(logFile)
+	InitializeLogging(config)
 
 	// Create channel to handle incoming sigint and sigterm
 	done := make(chan os.Signal, 1)
@@ -71,7 +74,16 @@ func main() {
 	log.Debug("Server Exited Properly")
 }
 
-func InitializeLogging(logFile string) {
+func setupConfig() (*viper.Viper, error) {
+	configFile := os.Getenv("CONFIG_FILE")
+	configPath := os.Getenv("CONFIG_PATH")
+
+	return  utils.LoadConfig(configFile, configPath)
+}
+
+func InitializeLogging(config *viper.Viper) {
+	logConfig := config.Sub("log")
+	logFile := logConfig.GetString("log-file")
 
 	var file, err = os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
