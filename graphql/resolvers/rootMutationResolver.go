@@ -2,7 +2,7 @@ package resolvers
 
 import (
 	"context"
-	"github.com/schartey/gqlgen-auth-starter/gqlgen"
+	"github.com/schartey/gqlgen-auth-starter/graphql"
 	"github.com/schartey/gqlgen-auth-starter/model"
 	"strconv"
 
@@ -14,7 +14,7 @@ type rootMutationResolver struct {
 	Users map[string]*model.User
 }
 
-func (r *rootMutationResolver) AddUser(ctx context.Context, user gqlgen.UserInput) (*model.User, error) {
+func (r *rootMutationResolver) AddUser(ctx context.Context, user graphql.UserInput) (*model.User, error) {
 	id := 0
 	for k := range r.Users {
 		currentId, err := strconv.Atoi(k)

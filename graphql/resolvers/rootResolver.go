@@ -1,7 +1,7 @@
 package resolvers
 
 import (
-	"github.com/schartey/gqlgen-auth-starter/gqlgen"
+	"github.com/schartey/gqlgen-auth-starter/graphql"
 	"github.com/schartey/gqlgen-auth-starter/model"
 )
 
@@ -13,10 +13,10 @@ func NewRootResolver(users map[string]*model.User) *RootResolver {
 	return &RootResolver{users}
 }
 
-func (r *RootResolver) Query() gqlgen.QueryResolver {
+func (r *RootResolver) Query() graphql.QueryResolver {
 	return &rootQueryResolver{Users: r.Users}
 }
 
-func (r *RootResolver) Mutation() gqlgen.MutationResolver {
+func (r *RootResolver) Mutation() graphql.MutationResolver {
 	return &rootMutationResolver{Users: r.Users}
 }

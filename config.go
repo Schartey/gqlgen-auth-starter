@@ -1,7 +1,6 @@
-package utils
+package main
 
 import (
-	"log"
 	"time"
 
 	"github.com/spf13/viper"
@@ -36,4 +35,3 @@ func LoadConfig(name string, path string) (*viper.Viper, error) {
 
 	return config, nil
 }
-

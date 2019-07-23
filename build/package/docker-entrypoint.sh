@@ -17,8 +17,8 @@ trap 'kill ${!}; int_proc' SIGINT
 trap 'kill ${!}; int_proc' SIGTERM
 
 # setup application
-FOLDER=/app/gqlgen
-FILE=/app/gqlgen/gqlgen.yml
+FOLDER=/app/graphql
+FILE=/app/graphql/gqlgen.yml
 
 if [ ! -d "$FOLDER" ]; then
     echo 'Creating gqlgen folder'

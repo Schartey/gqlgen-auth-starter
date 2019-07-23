@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"github.com/schartey/gqlgen-auth-starter/gqlgen/resolvers"
+	"github.com/schartey/gqlgen-auth-starter/graphql"
+	"github.com/schartey/gqlgen-auth-starter/graphql/resolvers"
 	"github.com/schartey/gqlgen-auth-starter/model"
-	"github.com/schartey/gqlgen-auth-starter/utils"
 	"github.com/spf13/viper"
 	"io"
 	"syscall"
@@ -17,8 +17,7 @@ import (
 	"github.com/99designs/gqlgen/handler"
 	log "github.com/sirupsen/logrus"
 
-	h "github.com/schartey/gqlgen-auth-starter/handler"
-	"github.com/schartey/gqlgen-auth-starter/gqlgen"
+	h "github.com/schartey/gqlgen-auth-starter/graphql/handler"
 
 	nested "github.com/antonfisher/nested-logrus-formatter"
 )
@@ -33,7 +32,7 @@ func main() {
 
 	config, err := setupConfig()
 	if err != nil {
-		log.Panicf("Could not load config: %s", err)
+		log.Panicf("Could not load configs: %s", err)
 	}
 
 	port := os.Getenv("PORT")
@@ -78,7 +77,7 @@ func setupConfig() (*viper.Viper, error) {
 	configFile := os.Getenv("CONFIG_FILE")
 	configPath := os.Getenv("CONFIG_PATH")
 
-	return  utils.LoadConfig(configFile, configPath)
+	return  LoadConfig(configFile, configPath)
 }
 
 func InitializeLogging(config *viper.Viper) {
@@ -130,7 +129,7 @@ func setupServer(ctx context.Context, port string, resolver *resolvers.RootResol
 	server := http.Server{Addr: ":"+port, Handler: m}
 
 	m.Handle("/", handler.Playground("GraphQL playground", "/query"))
-	m.Handle("/query", h.AddContext(ctx, handler.GraphQL(gqlgen.NewExecutableSchema(gqlgen.Config{Resolvers: resolver}))))
+	m.Handle("/query", h.AddContext(ctx, handler.GraphQL(graphql.NewExecutableSchema(graphql.Config{Resolvers: resolver}))))
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {

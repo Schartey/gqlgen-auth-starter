@@ -1,0 +1,45 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  getUserById(id: String): User
+  getUsers: [User]!
+}
+
+type Mutation {
+  addUser(user: UserInput!): User
+}
+
+type Person {
+  id: ID!
+  firstname: String
+  lastname: String
+  email: String
+  phone: String
+  birthdate: Time
+}
+
+type User {
+  id: ID!
+  person: Person
+  username: String
+}
+
+scalar Time
+
+
+
+input PersonInput {
+  firstname: String!
+  lastname: String!
+  email: String!
+  phone: String!
+  birthdate: Time!
+}
+
+input UserInput {
+  username: String!
+  person: PersonInput!
+}

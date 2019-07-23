@@ -2,13 +2,13 @@ version: '3'
 
 services:
   gqlgen-auth-starter:
-    build: .
+    build: ../build/package
     volumes:
-      - .:/app
+      - ..:/app
       - $GOPATH/pkg/mod/cache:/go/pkg/mod/cache
     ports:
       - "3000:3000"
     environment:
       - PORT=3000
       - CONFIG_FILE=Config
-      - CONFIG_PATH=config
+      - CONFIG_PATH=configs
