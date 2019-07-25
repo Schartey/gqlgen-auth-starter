@@ -19,6 +19,7 @@ The purpose of this repository is to help others get started and receive valuabl
 - [ ] Health-Check
 - [ ] OpenTracing Support
 - [ ] Proper context usage
+- [x] Dependency Injection using [google/wire][10]
 - [ ] Cursor based pagination (Relay Cursor Connections Specification)
 - [ ] Data-Loader
 - [ ] Add Authentication using Keycloak
@@ -176,3 +177,4 @@ you have to remove (comment) the directives settings in gqlgen.yaml.
 [7]: https://github.com/mattdamon108/gqlmerge
 [8]: https://github.com/Sirupsen/logrus
 [9]: https://github.com/spf13/viper
+[10]: https://github.com/google/wire

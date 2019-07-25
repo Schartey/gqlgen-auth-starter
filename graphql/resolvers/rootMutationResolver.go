@@ -3,7 +3,6 @@ package resolvers
 import (
 	"context"
 	"github.com/schartey/gqlgen-auth-starter/graphql"
-	"github.com/schartey/gqlgen-auth-starter/model"
 	"github.com/schartey/gqlgen-auth-starter/user"
 	"strconv"
 
@@ -15,7 +14,7 @@ type rootMutationResolver struct {
 	userService *user.UserService
 }
 
-func (r *rootMutationResolver) AddUser(ctx context.Context, user graphql.UserInput) (*model.User, error) {
+func (r *rootMutationResolver) AddUser(ctx context.Context, userInput graphql.UserInput) (*user.User, error) {
 	id := 0
 	for k := range r.userService.GetUsers() {
 		currentId, err := strconv.Atoi(k)
@@ -28,19 +27,19 @@ func (r *rootMutationResolver) AddUser(ctx context.Context, user graphql.UserInp
 	}
 	id++
 	idString := strconv.Itoa(id)
-	r.userService.GetUsers()[idString] = &model.User{
-		Username: user.Username,
-		Person: model.Person{
-			Firstname: user.Person.Firstname,
-			Lastname:  user.Person.Lastname,
-			Email:     user.Person.Email,
-			Phone:     user.Person.Phone,
-			Birthdate: user.Person.Birthdate,
+	r.userService.GetUsers()[idString] = &user.User{
+		Username: userInput.Username,
+		Person: user.Person{
+			Firstname: userInput.Person.Firstname,
+			Lastname:  userInput.Person.Lastname,
+			Email:     userInput.Person.Email,
+			Phone:     userInput.Person.Phone,
+			Birthdate: userInput.Person.Birthdate,
 			ID:        "shouldbegenerated",
 		},
 	}
 
-	log.WithField("user", user).Debugf("AddUser")
+	log.WithField("user", userInput).Debugf("AddUser")
 
 	return r.userService.GetUsers()[idString], nil
 }

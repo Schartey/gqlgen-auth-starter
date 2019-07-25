@@ -2,7 +2,6 @@ package resolvers
 
 import (
 	"context"
-	"github.com/schartey/gqlgen-auth-starter/model"
 	"github.com/schartey/gqlgen-auth-starter/user"
 	log "github.com/sirupsen/logrus"
 )
@@ -16,15 +15,15 @@ type rootQueryResolver struct {
 	userService *user.UserService
 }
 
-func (r *rootQueryResolver) GetUserByID(ctx context.Context, id *string) (*model.User, error) {
+func (r *rootQueryResolver) GetUserByID(ctx context.Context, id *string) (*user.User, error) {
 	foundUser := r.userService.GetUsers()[*id]
 	log.WithField("user", foundUser).Debugf("GetUser")
 
 	return foundUser, nil
 }
 
-func (r *rootQueryResolver) GetUsers(ctx context.Context) ([]*model.User, error) {
-	var result []*model.User
+func (r *rootQueryResolver) GetUsers(ctx context.Context) ([]*user.User, error) {
+	var result []*user.User
 	for _, currentUser := range r.userService.GetUsers() {
 		result = append(result, currentUser)
 	}

@@ -1,7 +1,6 @@
 package user
 
 import (
-	"github.com/schartey/gqlgen-auth-starter/model"
 	"time"
 )
 
@@ -11,12 +10,12 @@ func NewUserService() *UserService {
 	return &UserService{}
 }
 
-func (u *UserService) GetUsers() map[string]*model.User {
-	return map[string]*model.User{
+func (u *UserService) GetUsers() map[string]*User {
+	return map[string]*User{
 		"1": {
 			ID:       "1",
 			Username: "Joe",
-			Person: model.Person{
+			Person: Person{
 				ID:        "1",
 				Firstname: "John",
 				Lastname:  "Doe",
@@ -28,7 +27,7 @@ func (u *UserService) GetUsers() map[string]*model.User {
 		"2": {
 			ID:       "2",
 			Username: "Jane",
-			Person: model.Person{
+			Person: Person{
 				ID:        "2",
 				Firstname: "Jane",
 				Lastname:  "Doe",

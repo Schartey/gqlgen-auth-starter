@@ -35,7 +35,6 @@ fi
 cd /app
 
 #run application
-echo 'Running'
 exec reflex -c /reflex/reflex.conf &
 pid="$!"
 

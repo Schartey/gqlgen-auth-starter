@@ -13,7 +13,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/schartey/gqlgen-auth-starter/model"
+	"github.com/schartey/gqlgen-auth-starter/user"
 	"github.com/vektah/gqlparser"
 	"github.com/vektah/gqlparser/ast"
 )
@@ -70,11 +70,11 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	AddUser(ctx context.Context, user UserInput) (*model.User, error)
+	AddUser(ctx context.Context, user UserInput) (*user.User, error)
 }
 type QueryResolver interface {
-	GetUserByID(ctx context.Context, id *string) (*model.User, error)
-	GetUsers(ctx context.Context) ([]*model.User, error)
+	GetUserByID(ctx context.Context, id *string) (*user.User, error)
+	GetUsers(ctx context.Context) ([]*user.User, error)
 }
 
 type executableSchema struct {
@@ -413,13 +413,13 @@ func (ec *executionContext) _Mutation_addUser(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.User)
+	res := resTmp.(*user.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUser2ᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋuserᚐUser(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Person_id(ctx context.Context, field graphql.CollectedField, obj *model.Person) (ret graphql.Marshaler) {
+func (ec *executionContext) _Person_id(ctx context.Context, field graphql.CollectedField, obj *user.Person) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -456,7 +456,7 @@ func (ec *executionContext) _Person_id(ctx context.Context, field graphql.Collec
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Person_firstname(ctx context.Context, field graphql.CollectedField, obj *model.Person) (ret graphql.Marshaler) {
+func (ec *executionContext) _Person_firstname(ctx context.Context, field graphql.CollectedField, obj *user.Person) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -490,7 +490,7 @@ func (ec *executionContext) _Person_firstname(ctx context.Context, field graphql
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Person_lastname(ctx context.Context, field graphql.CollectedField, obj *model.Person) (ret graphql.Marshaler) {
+func (ec *executionContext) _Person_lastname(ctx context.Context, field graphql.CollectedField, obj *user.Person) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -524,7 +524,7 @@ func (ec *executionContext) _Person_lastname(ctx context.Context, field graphql.
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Person_email(ctx context.Context, field graphql.CollectedField, obj *model.Person) (ret graphql.Marshaler) {
+func (ec *executionContext) _Person_email(ctx context.Context, field graphql.CollectedField, obj *user.Person) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -558,7 +558,7 @@ func (ec *executionContext) _Person_email(ctx context.Context, field graphql.Col
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Person_phone(ctx context.Context, field graphql.CollectedField, obj *model.Person) (ret graphql.Marshaler) {
+func (ec *executionContext) _Person_phone(ctx context.Context, field graphql.CollectedField, obj *user.Person) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -592,7 +592,7 @@ func (ec *executionContext) _Person_phone(ctx context.Context, field graphql.Col
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Person_birthdate(ctx context.Context, field graphql.CollectedField, obj *model.Person) (ret graphql.Marshaler) {
+func (ec *executionContext) _Person_birthdate(ctx context.Context, field graphql.CollectedField, obj *user.Person) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -661,10 +661,10 @@ func (ec *executionContext) _Query_getUserById(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.User)
+	res := resTmp.(*user.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUser2ᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋuserᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_getUsers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -698,10 +698,10 @@ func (ec *executionContext) _Query_getUsers(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.User)
+	res := resTmp.([]*user.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋuserᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -779,7 +779,7 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	return ec.marshalO__Schema2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐSchema(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *user.User) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -816,7 +816,7 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_person(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_person(ctx context.Context, field graphql.CollectedField, obj *user.User) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -844,13 +844,13 @@ func (ec *executionContext) _User_person(ctx context.Context, field graphql.Coll
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(model.Person)
+	res := resTmp.(user.Person)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOPerson2githubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋmodelᚐPerson(ctx, field.Selections, res)
+	return ec.marshalOPerson2githubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋuserᚐPerson(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_username(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_username(ctx context.Context, field graphql.CollectedField, obj *user.User) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
 		if r := recover(); r != nil {
@@ -2139,7 +2139,7 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 var personImplementors = []string{"Person"}
 
-func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, obj *model.Person) graphql.Marshaler {
+func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, obj *user.Person) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.RequestContext, sel, personImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -2231,7 +2231,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 
 var userImplementors = []string{"User"}
 
-func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.User) graphql.Marshaler {
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *user.User) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.RequestContext, sel, userImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -2573,7 +2573,7 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋuserᚐUser(ctx context.Context, sel ast.SelectionSet, v []*user.User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -2597,7 +2597,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋscharteyᚋgqlgen�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋuserᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -2863,7 +2863,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return ec.marshalOBoolean2bool(ctx, sel, *v)
 }
 
-func (ec *executionContext) marshalOPerson2githubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋmodelᚐPerson(ctx context.Context, sel ast.SelectionSet, v model.Person) graphql.Marshaler {
+func (ec *executionContext) marshalOPerson2githubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋuserᚐPerson(ctx context.Context, sel ast.SelectionSet, v user.Person) graphql.Marshaler {
 	return ec._Person(ctx, sel, &v)
 }
 
@@ -2898,11 +2898,11 @@ func (ec *executionContext) marshalOTime2timeᚐTime(ctx context.Context, sel as
 	return graphql.MarshalTime(v)
 }
 
-func (ec *executionContext) marshalOUser2githubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2githubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋuserᚐUser(ctx context.Context, sel ast.SelectionSet, v user.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋscharteyᚋgqlgenᚑauthᚑstarterᚋuserᚐUser(ctx context.Context, sel ast.SelectionSet, v *user.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

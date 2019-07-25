@@ -12,9 +12,9 @@ model:
 
 models:
   Person:
-    model: github.com/schartey/gqlgen-auth-starter/model.Person
+    model: github.com/schartey/gqlgen-auth-starter/user.Person
   User:
-    model: github.com/schartey/gqlgen-auth-starter/model.User
+    model: github.com/schartey/gqlgen-auth-starter/user.User
 
 #resolver:
 #  filename: resolver.go
