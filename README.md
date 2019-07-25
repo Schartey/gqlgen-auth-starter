@@ -20,6 +20,7 @@ The purpose of this repository is to help others get started and receive valuabl
 - [ ] OpenTracing Support
 - [ ] Proper context usage
 - [ ] Cursor based pagination (Relay Cursor Connections Specification)
+- [ ] Data-Loader
 - [ ] Add Authentication using Keycloak
 - [ ] Add Authorization using Keycloak
 - [ ] Add Registration

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/schartey/gqlgen-auth-starter/graphql"
 	"github.com/schartey/gqlgen-auth-starter/model"
+	"github.com/schartey/gqlgen-auth-starter/user"
 	"strconv"
 
 	log "github.com/sirupsen/logrus"
@@ -11,12 +12,12 @@ import (
 
 type rootMutationResolver struct {
 	*Resolver
-	Users map[string]*model.User
+	userService *user.UserService
 }
 
 func (r *rootMutationResolver) AddUser(ctx context.Context, user graphql.UserInput) (*model.User, error) {
 	id := 0
-	for k := range r.Users {
+	for k := range r.userService.GetUsers() {
 		currentId, err := strconv.Atoi(k)
 		if err != nil {
 			return nil, err
@@ -27,7 +28,7 @@ func (r *rootMutationResolver) AddUser(ctx context.Context, user graphql.UserInp
 	}
 	id++
 	idString := strconv.Itoa(id)
-	r.Users[idString] = &model.User{
+	r.userService.GetUsers()[idString] = &model.User{
 		Username: user.Username,
 		Person: model.Person{
 			Firstname: user.Person.Firstname,
@@ -41,5 +42,5 @@ func (r *rootMutationResolver) AddUser(ctx context.Context, user graphql.UserInp
 
 	log.WithField("user", user).Debugf("AddUser")
 
-	return r.Users[idString], nil
+	return r.userService.GetUsers()[idString], nil
 }

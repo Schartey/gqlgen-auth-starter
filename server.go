@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/schartey/gqlgen-auth-starter/graphql"
 	"github.com/schartey/gqlgen-auth-starter/graphql/resolvers"
-	"github.com/schartey/gqlgen-auth-starter/model"
 	"github.com/spf13/viper"
 	"io"
 	"syscall"
@@ -23,9 +22,6 @@ import (
 )
 
 const defaultPort = "8080"
-const defaultLogFile = "default.log"
-
-var server http.Server
 
 func main() {
 	ctx := context.Background()
@@ -41,17 +37,14 @@ func main() {
 	}
 
 	// Initialize Logging to file and stdout
-	InitializeLogging(config)
+	initializeLogging(config)
 
 	// Create channel to handle incoming sigint and sigterm
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
-	// Here we might setup our repositories for database storage
-	users := setupRepository()
-
 	// Add repositories to the resolver so we can store data in resolvers
-	resolver := resolvers.NewRootResolver(users)
+	resolver := WireUp()
 
 	// Setup server
 	server := setupServer(ctx, port, resolver)
@@ -77,10 +70,10 @@ func setupConfig() (*viper.Viper, error) {
 	configFile := os.Getenv("CONFIG_FILE")
 	configPath := os.Getenv("CONFIG_PATH")
 
-	return  LoadConfig(configFile, configPath)
+	return LoadConfig(configFile, configPath)
 }
 
-func InitializeLogging(config *viper.Viper) {
+func initializeLogging(config *viper.Viper) {
 	logConfig := config.Sub("log")
 	logFile := logConfig.GetString("log-file")
 
@@ -95,38 +88,9 @@ func InitializeLogging(config *viper.Viper) {
 	})
 }
 
-func setupRepository() map[string]*model.User {
-	return map[string]*model.User{
-		"1": {
-			ID:       "1",
-			Username: "Joe",
-			Person: model.Person{
-				ID:        "1",
-				Firstname: "John",
-				Lastname:  "Doe",
-				Email:     "john.doe@mail.com",
-				Phone:     "+1234567890",
-				Birthdate: time.Now(),
-			},
-		},
-		"2": {
-			ID:       "2",
-			Username: "Jane",
-			Person: model.Person{
-				ID:        "2",
-				Firstname: "Jane",
-				Lastname:  "Doe",
-				Email:     "jane.doe@mail.com",
-				Phone:     "+1345678901",
-				Birthdate: time.Now(),
-			},
-		},
-	}
-}
-
-func setupServer(ctx context.Context, port string, resolver *resolvers.RootResolver) http.Server {
+func setupServer(ctx context.Context, port string, resolver *resolvers.RootResolver) *http.Server {
 	m := http.NewServeMux()
-	server := http.Server{Addr: ":"+port, Handler: m}
+	server := http.Server{Addr: ":" + port, Handler: m}
 
 	m.Handle("/", handler.Playground("GraphQL playground", "/query"))
 	m.Handle("/query", h.AddContext(ctx, handler.GraphQL(graphql.NewExecutableSchema(graphql.Config{Resolvers: resolver}))))
@@ -139,5 +103,5 @@ func setupServer(ctx context.Context, port string, resolver *resolvers.RootResol
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 
-	return server
+	return &server
 }
