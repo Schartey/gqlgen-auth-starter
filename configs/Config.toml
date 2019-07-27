@@ -1,3 +1,10 @@
 [log]
     debug-mode = true
     log-file = "tmp/gqlgen-auth-starter.log"
+
+[keycloak]
+    host-name = "http://keycloak:8080/auth/realms/demo"
+    client-id = "gqlgen-auth-starter"
+    client-secret = "f6e4249e-db20-469a-a044-f220749f3302"
+    redirect-url = "http://127.0.0.1:3000/keycloak"
+    realm = "demo"

@@ -6,14 +6,20 @@
 package main
 
 import (
+	"context"
 	"github.com/schartey/gqlgen-auth-starter/graphql/resolvers"
+	"github.com/schartey/gqlgen-auth-starter/keycloak"
 	"github.com/schartey/gqlgen-auth-starter/user"
+	"github.com/spf13/viper"
 )
 
 // Injectors from wire.go:
 
-func WireUp() *resolvers.RootResolver {
-	userService := user.NewUserService()
+func WireUp(ctx context.Context, keycloakConfig *viper.Viper) *resolvers.RootResolver {
+	keycloakKeycloak := keycloak.NewKeycloak(ctx, keycloakConfig)
+	keycloakRepository := keycloak.NewKeycloakRepository(keycloakKeycloak)
+	keycloakService := keycloak.NewKeycloakService(keycloakRepository)
+	userService := user.NewUserService(keycloakService)
 	rootResolver := resolvers.NewRootResolver(userService)
 	return rootResolver
 }

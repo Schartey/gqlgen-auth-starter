@@ -44,7 +44,8 @@ func main() {
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	// Add repositories to the resolver so we can store data in resolvers
-	resolver := WireUp()
+	keycloakConfig := config.Sub("keycloak")
+	resolver := WireUp(ctx, keycloakConfig)
 
 	// Setup server
 	server := setupServer(ctx, port, resolver)

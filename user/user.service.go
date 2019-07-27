@@ -1,13 +1,16 @@
 package user
 
 import (
+	"github.com/schartey/gqlgen-auth-starter/keycloak"
 	"time"
 )
 
-type UserService struct{}
+type UserService struct {
+	keycloakService *keycloak.KeycloakService
+}
 
-func NewUserService() *UserService {
-	return &UserService{}
+func NewUserService(keycloakService *keycloak.KeycloakService) *UserService {
+	return &UserService{keycloakService: keycloakService}
 }
 
 func (u *UserService) GetUsers() map[string]*User {
