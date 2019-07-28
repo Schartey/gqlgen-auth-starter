@@ -7,6 +7,8 @@ package main
 
 import (
 	"context"
+	"github.com/google/wire"
+	"github.com/schartey/gqlgen-auth-starter/graphql/handler"
 	"github.com/schartey/gqlgen-auth-starter/graphql/resolvers"
 	"github.com/schartey/gqlgen-auth-starter/keycloak"
 	"github.com/schartey/gqlgen-auth-starter/user"
@@ -15,7 +17,7 @@ import (
 
 // Injectors from wire.go:
 
-func WireUp(ctx context.Context, keycloakConfig *viper.Viper) *resolvers.RootResolver {
+func WireRootResolver(ctx context.Context, keycloakConfig *viper.Viper) *resolvers.RootResolver {
 	keycloakKeycloak := keycloak.NewKeycloak(ctx, keycloakConfig)
 	keycloakRepository := keycloak.NewKeycloakRepository(keycloakKeycloak)
 	keycloakService := keycloak.NewKeycloakService(keycloakRepository)
@@ -23,3 +25,17 @@ func WireUp(ctx context.Context, keycloakConfig *viper.Viper) *resolvers.RootRes
 	rootResolver := resolvers.NewRootResolver(userService)
 	return rootResolver
 }
+
+func WireHandlerServiceProvider(ctx context.Context, keycloakConfig *viper.Viper) *handler.HandlerServiceProvider {
+	keycloakKeycloak := keycloak.NewKeycloak(ctx, keycloakConfig)
+	keycloakRepository := keycloak.NewKeycloakRepository(keycloakKeycloak)
+	keycloakService := keycloak.NewKeycloakService(keycloakRepository)
+	handlerServiceProvider := handler.NewHandlerServiceProvider(keycloakService)
+	return handlerServiceProvider
+}
+
+// wire.go:
+
+var keycloakSet = wire.NewSet(keycloak.NewKeycloakService, keycloak.NewKeycloakRepository, keycloak.NewKeycloak)
+
+var userSet = wire.NewSet(user.NewUserService)

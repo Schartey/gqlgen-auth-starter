@@ -6,5 +6,5 @@
     host-name = "http://keycloak:8080/auth/realms/demo"
     client-id = "gqlgen-auth-starter"
     client-secret = "f6e4249e-db20-469a-a044-f220749f3302"
-    redirect-url = "http://127.0.0.1:3000/keycloak"
+    redirect-url = "http://localhost:3000/keycloak"
     realm = "demo"

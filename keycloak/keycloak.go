@@ -5,10 +5,13 @@ import (
 	"github.com/coreos/go-oidc"
 	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
+	"sync"
 	"time"
 
 	log "github.com/sirupsen/logrus"
 )
+
+var keycloakLock = &sync.Mutex{}
 
 type KeycloakInfo struct {
 	hostName     string
@@ -29,7 +32,18 @@ type Keycloak struct {
 	oAuthInfo    *OAuthInfo
 }
 
+var instance *Keycloak
+
 func NewKeycloak(ctx context.Context, keycloakConfig *viper.Viper) *Keycloak {
+
+	keycloakLock.Lock()
+	defer keycloakLock.Unlock()
+
+	if instance != nil {
+		log.Infof("Already exists")
+		return instance
+	}
+
 	keycloakInfo := &KeycloakInfo{
 		hostName:     keycloakConfig.GetString("host-name"),
 		clientID:     keycloakConfig.GetString("client-id"),
@@ -43,7 +57,8 @@ func NewKeycloak(ctx context.Context, keycloakConfig *viper.Viper) *Keycloak {
 		log.Panicf("Could not setup OAuth with Keycloak: %s", err)
 	}
 
-	return &Keycloak{keycloakInfo: keycloakInfo, oAuthInfo: oauthInfo}
+	instance = &Keycloak{keycloakInfo: keycloakInfo, oAuthInfo: oauthInfo}
+	return instance
 }
 
 func connectKeycloak(ctx context.Context, hostName string) (provider *oidc.Provider, err error) {

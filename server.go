@@ -45,10 +45,11 @@ func main() {
 
 	// Add repositories to the resolver so we can store data in resolvers
 	keycloakConfig := config.Sub("keycloak")
-	resolver := WireUp(ctx, keycloakConfig)
+	resolver := WireRootResolver(ctx, keycloakConfig)
+	handlerServiceProvider := WireHandlerServiceProvider(ctx, keycloakConfig)
 
 	// Setup server
-	server := setupServer(ctx, port, resolver)
+	server := setupServer(ctx, port, resolver, handlerServiceProvider)
 
 	// When we receive sigint or siterm we continue to stopping the server
 	<-done
@@ -89,12 +90,14 @@ func initializeLogging(config *viper.Viper) {
 	})
 }
 
-func setupServer(ctx context.Context, port string, resolver *resolvers.RootResolver) *http.Server {
+func setupServer(ctx context.Context, port string, resolver *resolvers.RootResolver, handlerServiceProvider *h.HandlerServiceProvider) *http.Server {
 	m := http.NewServeMux()
 	server := http.Server{Addr: ":" + port, Handler: m}
 
-	m.Handle("/", handler.Playground("GraphQL playground", "/query"))
+	m.Handle("/login", h.AddContext(ctx, h.Login(handlerServiceProvider)))
 	m.Handle("/query", h.AddContext(ctx, handler.GraphQL(graphql.NewExecutableSchema(graphql.Config{Resolvers: resolver}))))
+
+	m.Handle("/", handler.Playground("GraphQL playground", "/query"))
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
