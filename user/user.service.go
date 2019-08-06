@@ -1,6 +1,8 @@
 package user
 
 import (
+	"context"
+	"errors"
 	"github.com/schartey/gqlgen-auth-starter/keycloak"
 	"time"
 )
@@ -40,4 +42,23 @@ func (u *UserService) GetUsers() map[string]*User {
 			},
 		},
 	}
+}
+
+func (u *UserService) HandleLogin(ctx context.Context, state string, code string) (*keycloak.User, error) {
+	//State must be random!
+	if "test" != state {
+		return nil, errors.New("State not matching")
+	}
+
+	rawIDToken, err := u.keycloakService.VerifyCallback(ctx, code)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := u.keycloakService.ConvertToken(ctx, rawIDToken)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

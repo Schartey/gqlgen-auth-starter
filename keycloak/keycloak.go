@@ -32,16 +32,15 @@ type Keycloak struct {
 	oAuthInfo    *OAuthInfo
 }
 
-var instance *Keycloak
+var keycloakInstace *Keycloak
 
 func NewKeycloak(ctx context.Context, keycloakConfig *viper.Viper) *Keycloak {
 
 	keycloakLock.Lock()
 	defer keycloakLock.Unlock()
 
-	if instance != nil {
-		log.Infof("Already exists")
-		return instance
+	if keycloakInstace != nil {
+		return keycloakInstace
 	}
 
 	keycloakInfo := &KeycloakInfo{
@@ -57,8 +56,8 @@ func NewKeycloak(ctx context.Context, keycloakConfig *viper.Viper) *Keycloak {
 		log.Panicf("Could not setup OAuth with Keycloak: %s", err)
 	}
 
-	instance = &Keycloak{keycloakInfo: keycloakInfo, oAuthInfo: oauthInfo}
-	return instance
+	keycloakInstace = &Keycloak{keycloakInfo: keycloakInfo, oAuthInfo: oauthInfo}
+	return keycloakInstace
 }
 
 func connectKeycloak(ctx context.Context, hostName string) (provider *oidc.Provider, err error) {

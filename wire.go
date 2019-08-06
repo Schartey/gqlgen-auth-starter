@@ -13,7 +13,7 @@ import (
 	"github.com/google/wire"
 )
 
-var keycloakSet = wire.NewSet(keycloak.NewKeycloakService, keycloak.NewKeycloakRepository, keycloak.NewKeycloak)
+var keycloakSet = wire.NewSet(keycloak.NewKeycloakService, keycloak.NewKeycloakRepository, keycloak.NewKeycloakRest, keycloak.NewKeycloak)
 var userSet = wire.NewSet(user.NewUserService)
 
 func WireRootResolver(ctx context.Context, keycloakConfig *viper.Viper) *resolvers.RootResolver {
@@ -22,7 +22,7 @@ func WireRootResolver(ctx context.Context, keycloakConfig *viper.Viper) *resolve
 }
 
 func WireHandlerServiceProvider(ctx context.Context, keycloakConfig *viper.Viper) *handler.HandlerServiceProvider {
-	wire.Build(handler.NewHandlerServiceProvider, keycloakSet)
+	wire.Build(handler.NewHandlerServiceProvider, userSet, keycloakSet)
 
 	return &handler.HandlerServiceProvider{}
 }
